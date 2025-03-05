@@ -1,0 +1,1 @@
+export const RAHYAB_SOAP_CLIENT = 'RAHYAB_SOAP_CLIENT';
