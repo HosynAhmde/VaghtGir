@@ -5,6 +5,7 @@ import { UserDto } from "./dto";
 import { PaginationDto } from "@Common/dto/pagination.dto";
 import { createPaginationMetadata } from "@Common/utils";
 import { ItemsWithMetadata } from "@Common/interfaces";
+import { TWhereQuery } from "@Common/decorators";
 
 
 export class UserRepository extends Repository<UserEntity>{
@@ -20,12 +21,14 @@ export class UserRepository extends Repository<UserEntity>{
         return await this.userRepository.save(newUser)        
     }
 
-    async findUsers(filter:PaginationDto):Promise<ItemsWithMetadata<UserEntity>>{
+    async findUsers(filter:PaginationDto,where:TWhereQuery):Promise<ItemsWithMetadata<UserEntity>>{    
        const {limit,page,skip}=filter;
                 const[user,count]=await this.userRepository.findAndCount({
                     take:limit,
                     skip,
-                    where:{}
+                    where:{
+                        ...where[0]
+                    }
                 });
                 const metadata=createPaginationMetadata(count,limit,page);
                 return {items:user,metadata};
@@ -37,11 +40,5 @@ export class UserRepository extends Repository<UserEntity>{
 
     async findUserByPhone(phone:string):Promise<UserEntity>{
         return await this.userRepository.findOneBy({phone});
-    }
-
-   private async updateCreatedBy(id:string):Promise<UserEntity>{
-        const user=await this.userRepository.findOneBy({id});
-        user.createdBy=id;
-        return await this.userRepository.save(user);
     }
 }

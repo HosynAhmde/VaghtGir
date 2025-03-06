@@ -4,7 +4,7 @@ import { UserEntity } from "./entity/user.entity";
 import { UserRepository } from "./user.repository";
 import { PaginationDto } from "@Common/dto/pagination.dto";
 import { ItemsWithMetadata } from "@Common/interfaces";
-import { createPaginationMetadata } from "@Common/utils";
+import { TWhereQuery } from "@Common/decorators";
 
 @Injectable()
 export class UserService{
@@ -13,8 +13,8 @@ export class UserService{
         return await this.userRepository.createUser(user);
     }
 
-    async findUsers(filter?:PaginationDto):Promise<ItemsWithMetadata<UserEntity>>{
-        return await this.userRepository.findUsers(filter);
+    async findUsers(whereQuery: TWhereQuery, filter?:PaginationDto):Promise<ItemsWithMetadata<UserEntity>>{
+        return await this.userRepository.findUsers(filter,whereQuery);
         
     }
 

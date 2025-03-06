@@ -1,4 +1,4 @@
-import { Body, ClassSerializerInterceptor, Controller, Get, Post, UseInterceptors } from "@nestjs/common";
+import { Body, ClassSerializerInterceptor, Controller, Get, Post, UseGuards, UseInterceptors } from "@nestjs/common";
 import { UserService } from "./user.service";
 import { UserDto } from "./dto";
 import { UserSerializer, UsersSerializer } from "./serializers";
@@ -6,23 +6,29 @@ import { AuthorityInterceptor, QueryParserInterceptor, SetCreatedByInterceptor }
 import { Filter } from "@Common/decorators/filter.decorator";
 import { PaginationDto } from "@Common/dto/pagination.dto";
 import { UserEntity } from "./entity";
-import { ResourceAction } from "@Common/decorators";
+import { ResourceAction, TWhereQuery, WhereQuery } from "@Common/decorators";
 import { Action, Resource } from "@Common/constants";
+import { AuthGuard, PolicyGuard } from "@Common/guards";
+import { SetPolicy, SetResource } from "@Common/metadata";
 
 @Controller('user')
+@SetResource(Resource.User)
+@UseGuards(AuthGuard, PolicyGuard)
 @UseInterceptors(QueryParserInterceptor, ClassSerializerInterceptor)
 export class UserController{
  constructor(private userService:UserService){}
  
  @Post()
  @UseInterceptors(AuthorityInterceptor,SetCreatedByInterceptor)
- @ResourceAction(Resource.User, Action.Create)
+ @SetPolicy(Action.Create)
     async createUser(@Body() user:UserDto):Promise<UserSerializer>{
         return UserSerializer.build(await this.userService.createUser(user));
         
     }
     @Get()
-    async findUsers(@Filter() filter:PaginationDto):Promise<UsersSerializer>{        
-        return UsersSerializer.build(await this.userService.findUsers(filter));
+    @SetPolicy(Action.Read)
+    @UseInterceptors(AuthorityInterceptor)
+    async findUsers(@Filter() filter:PaginationDto,@WhereQuery() whereQuery: TWhereQuery):Promise<UsersSerializer>{        
+        return UsersSerializer.build(await this.userService.findUsers(whereQuery, filter));
     }
 }

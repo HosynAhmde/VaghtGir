@@ -13,7 +13,7 @@ import { SessionRepository } from './session.repository';
 @Module({
   imports: [
     TypeOrmModule.forFeature([SessionEntity]),
-    JwtModule,
+    JwtModule.register({global:true}),
     UserModule,
     SmsModule,
   ],

@@ -15,7 +15,7 @@ export class QueryParserInterceptor implements NestInterceptor {
   ): Observable<any> | Promise<Observable<any>> {
     const request = ctx.switchToHttp().getRequest<AppRequest>();
 
-    const {  sort, limit, page, skip } = request.query;
+    const {limit, page, skip } = request.query;
 
     const filters: any = {
         limit,

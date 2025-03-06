@@ -18,7 +18,7 @@ export class AuthorityInterceptor implements NestInterceptor {
 
     if (!permission)
       throw new Error(
-        'Permission is required please check your code and use @PolicyGuard',
+        'Permission is required please check your code and use @PolicyGuard'
       );
 
     request.whereQuery = queryRestriction(
@@ -26,6 +26,7 @@ export class AuthorityInterceptor implements NestInterceptor {
       permission,
       token,
     );
+    
 
     return next.handle();
   }

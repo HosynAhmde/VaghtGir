@@ -1,6 +1,6 @@
 import { ConfigNamespace } from '@Common/configuration/config.constant';
 import { RedisService } from '@Common/modules/redis';
-import { SmsService } from '@Common/modules/sms';
+
 
 import { generateCacheKey, Hash } from '@Common/utils';
 
@@ -16,6 +16,7 @@ import { ConfigService } from '@nestjs/config';
 import { digity } from 'digity';
 import { OTP_CACHE_KEY } from '../constants';
 import { isDev, isStaging } from '@Common/utils/node.util';
+import { SmsService } from '@Common/modules/sms';
 
 @Injectable()
 export class OtpService {
@@ -39,7 +40,7 @@ export class OtpService {
     try {
       await this.storeOtp(mobile, otp);
 
-      await this.smsService.sendOtp(mobile, otp);
+      await this.smsService.sendCode(mobile, otp,{ttl: +this.otpTTL});
       return { ttl: +this.otpTTL };
     } catch (error) {
       console.log(error);
@@ -49,11 +50,9 @@ export class OtpService {
   }
 
   async validate(mobile: string, otp: string) {
-    console.log('hi');
     
     if (isDev) {
       const otpLength = this.otpLength.toString();
-      console.log('hi');
       
       const validOtp: Record<string, string> = {
         '4': '1111',

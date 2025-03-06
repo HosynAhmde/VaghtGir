@@ -30,7 +30,7 @@ export const queryRestriction = (
 
   const OR = [];
 
-  if (query.createdBy) OR.push({ owner: query.createdBy });
+  if (query.createdBy) OR.push({ createdBy: query.createdBy });
   if (query.shares) OR.push({ shares: query.shares });
 
   if (OR.length > 0) {
@@ -48,5 +48,6 @@ export const queryRestriction = (
 
   query.AND = AND;
 
-  return query as TWhereQuery;
+
+  return AND as TWhereQuery;
 };

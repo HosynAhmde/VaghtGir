@@ -7,6 +7,7 @@ import { UserEntity } from '@Modules/user/entity';
 
 import type { Permission } from 'abacl';
 import type { Request } from 'express';
+import { Filter } from 'typeorm';
 import type { IResult } from 'ua-parser-js';
 
 export interface File extends Express.Multer.File {}

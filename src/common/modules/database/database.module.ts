@@ -15,6 +15,7 @@ import { get } from "lodash";
             database: configService.get('DB_NAME'),
             autoLoadEntities: true,
             synchronize: true,
+            logging:true
         }),
         inject: [ConfigService],
     })],

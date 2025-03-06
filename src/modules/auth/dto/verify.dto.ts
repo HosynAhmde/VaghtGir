@@ -4,7 +4,6 @@ import { Phone } from '@Common/decorators';
 import { IsNotEmpty, IsString, Length } from 'class-validator';
 
 const digits = ConfigNamespace.Otp.length;
-console.log(digits);
 
 export class VerifyDto {
   @IsNotEmpty({ message: 'AUTH.MOBILE_REQUIRED' })

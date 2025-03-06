@@ -1,1 +1,1 @@
-export * from './sms.provider.interface';
+export * from './kaveh-response.interface'

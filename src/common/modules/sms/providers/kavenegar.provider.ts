@@ -1,45 +1,41 @@
-import { ConfigNamespace } from '@Common/configuration/config.constant';
-import { HttpService } from '@nestjs/axios';
-import { Injectable, Logger } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import { Injectable } from '@nestjs/common';
+import type { kavenegar as Provider } from 'kavenegar';
+import { KavenegarApi } from 'kavenegar';
+import { PinoLogger } from 'nestjs-pino';
 
-import type { SmsProvider } from '../interface/sms.provider.interface';
+import type { OtpPayload } from '../types';
+import { KaveResponse } from '../interface';
+
+export interface KavenegarSendOptions {
+  template: string;
+}
+
+const log = new PinoLogger({ renameContext: 'KavenegarService' });
 
 @Injectable()
-export class KavenegarProvider implements SmsProvider {
-  private logger = new Logger(this.constructor.name);
-  private readonly baseUrl: string;
-  private readonly apiKey: string;
-  private readonly apiVersion: string;
-  private readonly otpTemplate: string;
-
-  constructor(
-    private readonly httpService: HttpService,
-    private readonly configService: ConfigService,
-  ) {
-    const {
-      kavenegar: { baseUrl, apiKey, apiVersion, otpTemplate },
-    } = this.configService.get(ConfigNamespace.Sms);
-
-    this.apiKey = apiKey;
-    this.baseUrl = baseUrl;
-    this.apiVersion = apiVersion;
-    this.otpTemplate = otpTemplate;
+export class KavenegarService {
+  getClient(options: Provider.Options): Provider.KavenegarInstance {
+    return KavenegarApi(options);
   }
 
-  async sendOtp(phone: string, otp: any): Promise<void> {
-    const url = `${this.baseUrl}/${this.apiVersion}/${this.apiKey}/verify/lookup.json`;
-    const params = {
-      receptor: phone,
-      token: otp,
-      template: this.otpTemplate,
-    };
-
-    try {
-      await this.httpService.axiosRef.get(url, { params });
-    } catch (error) {
-      this.logger.error(error);
-      throw error;
-    }
+  static send(
+    client: Provider.KavenegarInstance,
+    payload: OtpPayload,
+    options?: KavenegarSendOptions,
+  ): Promise<{ status: number; response: KaveResponse[] }> {
+    return new Promise((resolve, _reject) => {
+      client.VerifyLookup(
+        {
+          receptor: payload.phone,
+          token: payload.code,
+          template: options?.template,
+        },
+        (response, status, message) => {
+          log.debug({ response, status, message });
+          log.trace('kavenegar worked successfully');
+          resolve({ status, response });
+        },
+      );
+    });
   }
 }

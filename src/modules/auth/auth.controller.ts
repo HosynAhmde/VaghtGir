@@ -78,8 +78,6 @@ export class AuthController {
     @Agent() agents: IResult,
     @IP() ip: string,
   ): Promise<AuthSerializer> {
-    console.log(verifyDto)
-
     return AuthSerializer.build(      
       await this.authService.verify(verifyDto, { ip, agents }),
     );
