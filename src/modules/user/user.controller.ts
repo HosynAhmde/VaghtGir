@@ -31,4 +31,11 @@ export class UserController{
     async findUsers(@Filter() filter:PaginationDto,@WhereQuery() whereQuery: TWhereQuery):Promise<UsersSerializer>{        
         return UsersSerializer.build(await this.userService.findUsers(whereQuery, filter));
     }
+
+    @Get(':id')
+    @SetPolicy(Action.Read)
+    @UseInterceptors(AuthorityInterceptor)
+    async findUserById(id:string):Promise<UserSerializer>{
+        return UserSerializer.build(await this.userService.findUserById(id));
+    }
 }
