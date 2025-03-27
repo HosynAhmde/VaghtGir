@@ -6,13 +6,13 @@ import { AuthController } from './auth.controller';
 import { AuthService, OtpService, SessionService } from './service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { SmsModule } from '@Common/modules/sms';
-import { SessionEntity } from './entity';
+import { Session } from './entity/session.schema';
 import { SessionRepository } from './session.repository';
 
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([SessionEntity]),
+    TypeOrmModule.forFeature([Session]),
     JwtModule.register({global:true}),
     UserModule,
     SmsModule,

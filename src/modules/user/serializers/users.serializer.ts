@@ -3,7 +3,7 @@ import { Metadata } from '@Common/interfaces';
 import { Exclude, Expose, Type } from 'class-transformer';
 
 import { UserSerializer } from './user.serializer';
-import { UserEntity } from '../entity/user.entity';
+import { User } from '../entity/user.entity';
 
 @Exclude()
 export class UsersSerializer {
@@ -17,7 +17,7 @@ export class UsersSerializer {
   static build({
     items,
     metadata,
-  }: ItemsWithMetadata<UserEntity>): UsersSerializer {
+  }: ItemsWithMetadata<User>): UsersSerializer {
     return new UsersSerializer({
       items: items.map(item => UserSerializer.build(item)),
       metadata,

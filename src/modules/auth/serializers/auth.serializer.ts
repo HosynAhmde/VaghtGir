@@ -1,5 +1,5 @@
 import { toPlain } from '@Common/utils';
-import { UserEntity } from '@Modules/user/entity';
+import { User } from '@Modules/user/entity/user.entity';
 import { UserSerializer } from '@Modules/user/serializers';
 import { Exclude, Expose, Type } from 'class-transformer';
 
@@ -19,7 +19,7 @@ export class AuthSerializer {
   expiration: number;
 
   static build(data: {
-    user: UserEntity;
+    user: User;
     accessToken: string;
     refreshToken: string;
   }): AuthSerializer {

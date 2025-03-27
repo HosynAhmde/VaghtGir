@@ -26,7 +26,7 @@ export class AuthorityInterceptor implements NestInterceptor {
       permission,
       token,
     );
-    
+
 
     return next.handle();
   }

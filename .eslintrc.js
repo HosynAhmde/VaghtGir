@@ -42,7 +42,7 @@ module.exports = init({
     },
     {
       files: [
-        '**/*.schema.ts',
+        '**/*.entity.ts',
         '**/*.dto.ts',
         '**/*.serializer.ts',
         '**/*.serializers.ts',

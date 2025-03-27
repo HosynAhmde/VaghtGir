@@ -21,8 +21,8 @@ import { SessionService } from './session.service';
 import { RedisService } from '@Common/modules/redis';
 import { BlacklistedService } from '@Common/modules/blacklisted';
 import { UserService } from '@Modules/user/user.service';
-import { UserEntity } from '@Modules/user/entity';
-import { SessionEntity } from '../entity';
+import { User } from '@Modules/user/entity/user.entity';
+import { Session } from '../entity/session.schema';
 import { Roles } from '@Common/constants';
 import { MD5, Time } from '@Common/helpers';
 import { OtpService } from './otp.service';
@@ -147,7 +147,7 @@ export class AuthService {
     verifyDto: VerifyDto,
     options: { ip?: string; agents: IResult },
   ) {
-    const { phone, token } = verifyDto;    
+    const { phone, token } = verifyDto;
     const isTokenMatched = await this.otpService.validate(phone, token);
 
     if (!isTokenMatched) throw new BadRequestException('AUTH.TOKEN_INVALID');
@@ -181,14 +181,14 @@ export class AuthService {
       refresh: true,
       session: session,
     });
-  
+
   }
-  
+
   private async generateUserResponse(
-    user: UserEntity,
+    user: User,
     options?: {
       refresh?: boolean;
-      session?: SessionEntity;
+      session?: Session;
       ip?: string;
       agents?: IResult; // ip and agents should be part of first args
     },
@@ -201,7 +201,7 @@ export class AuthService {
         agents: options.agents,
       },
       {
-        roles: [user.role as Roles],
+        roles: [user.role.role as Roles],
         session: options?.session,
       },
     );
@@ -223,7 +223,7 @@ export class AuthService {
       ip?: string;
       agents?: IResult;
     },
-    meta: { roles: Roles[]; session?: SessionEntity },
+    meta: { roles: Roles[]; session?: Session },
   ): Promise<{ code: string; payload: JwtToken }> {
     const session = meta.session ?? (await this.sessionService.createSession(data.ip, data.agents));
 
@@ -253,22 +253,22 @@ export class AuthService {
   }
 
 
-  private async findOrCreateUser(mobile: string): Promise<UserEntity> {
+  private async findOrCreateUser(mobile: string): Promise<User> {
     const user = await this.userService.findUserByPhone(mobile);
     return user ?? this.createUser(mobile);
   }
 
-  private async createUser(phone: string): Promise<UserEntity> {
+    private async createUser(phone: string): Promise<User> {
     try {
       return await this.userService.createUser({
         phone,
         role: Roles.User,
-        firstName:'',
-        lastName:''
+        firstName: '',
+        lastName: ''
       });
     } catch (error) {
       console.log(error);
-      
+
       throw new InternalServerErrorException();
     }
   }

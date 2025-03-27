@@ -11,7 +11,7 @@ export const WhereQuery = createParamDecorator(
   (_data, ctx: ExecutionContext): TWhereQuery => {
     const request = ctx.switchToHttp().getRequest<AppRequest>();
     console.log(request.whereQuery);
-    
+
     return request.whereQuery;
   },
 );

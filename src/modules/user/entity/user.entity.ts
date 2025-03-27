@@ -1,9 +1,11 @@
 import { Roles } from "@Common/constants";
 import { AbstractEntity } from "@Common/entity";
-import { AfterInsert, BeforeInsert, Column, Entity } from "typeorm";
+import { Role } from "@Modules/authorization/entity/role.entity";
+import { UserPermission } from "@Modules/authorization/entity/userPermission.entity";
+import { AfterInsert, BeforeInsert, Column, Entity, JoinColumn, ManyToOne, OneToMany } from "typeorm";
 
 @Entity()
-export class UserEntity  extends AbstractEntity<UserEntity> {
+export class User  extends AbstractEntity<User> {
 
   @Column({ type: 'varchar', length: 255 })
   firstName: string;
@@ -14,7 +16,11 @@ export class UserEntity  extends AbstractEntity<UserEntity> {
   @Column({ type: 'varchar', length: 14 ,unique:true})
   phone: string;
 
-  @Column({ type: 'varchar', length: 10, default:Roles.User})
-  role: string;
+  @ManyToOne(() => Role)
+  @JoinColumn({ name: 'role_id' })
+  role: Role;
+
+  @OneToMany(() => UserPermission, userPermission => userPermission.user)
+  userPermissions: UserPermission[];
 
 }

@@ -3,7 +3,7 @@
 import { TWhereQuery } from '@Common/decorators';
 import { Pagination } from '@Common/interfaces';
 import { JwtToken } from '@Modules/auth/interface';
-import { UserEntity } from '@Modules/user/entity';
+import { User } from '@Modules/user/entity/user.entity';
 
 import type { Permission } from 'abacl';
 import type { Request } from 'express';
@@ -14,14 +14,14 @@ export interface File extends Express.Multer.File {}
 
 export interface AppRequest extends Request {
   token?: JwtToken;
-  
+
   refreshToken?: JwtToken;
-  user?: UserEntity;
+  user?: User;
 
   whereQuery: TWhereQuery;
 
   paginationFilter:Pagination
- 
+
 
   ___userAgent: IResult;
 
