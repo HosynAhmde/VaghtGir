@@ -201,7 +201,7 @@ export class AuthService {
         agents: options.agents,
       },
       {
-        roles: [user.role.role as Roles],
+        roles: [Roles.User],
         session: options?.session,
       },
     );

@@ -11,10 +11,10 @@ export class UserPermission {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => User, user => user.userPermissions)
-  user: User;
+  // @ManyToOne(() => User, user => user.userPermissions)
+  // user: User;
 
-  @ManyToOne(() => Permission)
+  @ManyToOne(() => Permission, (permission) => permission.userPermissions)
   permission: Permission;
 
   @Column({type:'boolean',nullable:true})

@@ -16,11 +16,10 @@ export class User  extends AbstractEntity<User> {
   @Column({ type: 'varchar', length: 14 ,unique:true})
   phone: string;
 
-  @ManyToOne(() => Role)
-  @JoinColumn({ name: 'role_id' })
-  role: Role;
+  @Column({ type: 'varchar', length: 255 ,enum:Roles,default:Roles.User})
+  role: Roles;
 
-  @OneToMany(() => UserPermission, userPermission => userPermission.user)
-  userPermissions: UserPermission[];
+  // @OneToMany(() => UserPermission, userPermission => userPermission.user)
+  // userPermissions: UserPermission[];
 
 }
