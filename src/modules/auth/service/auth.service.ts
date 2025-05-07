@@ -20,7 +20,7 @@ import type { JwtToken } from '../interface';
 import { SessionService } from './session.service';
 import { RedisService } from '@Common/modules/redis';
 import { BlacklistedService } from '@Common/modules/blacklisted';
-import { UserService } from '@Modules/user/user.service';
+import { UserService } from '@Modules/user/service/user.service';
 import { User } from '@Modules/user/entity/user.entity';
 import { Session } from '../entity/session.schema';
 import { Roles } from '@Common/constants';
@@ -263,8 +263,7 @@ export class AuthService {
       return await this.userService.createUser({
         phone,
         role: Roles.User,
-        firstName: '',
-        lastName: ''
+        createdBy: 'system',
       });
     } catch (error) {
       console.log(error);

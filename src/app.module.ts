@@ -8,14 +8,14 @@ import { RedisModule } from '@Common/modules/redis';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { HttpModule } from '@nestjs/axios';
-import { UserModule } from '@Modules/user/user.module';
-import { AuthModule } from '@Modules/auth';
 import { SmsModule } from '@Common/modules/sms';
-
+import { Modules } from '@Modules/modules.module';
+import { JwtModule } from '@nestjs/jwt';
 
 
 @Module({
   imports: [ConfigModule.forRoot({isGlobal: true}),
+    JwtModule.register({ global: true }),
     MiddlewareModule,
     ConfigurationModule,
     RedisModule.registerAsync(),
@@ -25,8 +25,7 @@ import { SmsModule } from '@Common/modules/sms';
     DatabaseModule,
     HttpModule,
     SmsModule,
-    AuthModule,
-    UserModule
+    Modules
   ],
   controllers: [],
   providers: [],

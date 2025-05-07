@@ -6,6 +6,7 @@ import { swaggerConfig } from '@Common/modules/swagger';
 import { getNodeEnv } from '@Common/utils';
 import { Logger } from '@nestjs/common';
 
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
@@ -20,7 +21,6 @@ async function bootstrap() {
 
   await app.listen(port, host);
   const logger = new Logger();
-
   logger.log(`App Environment is ${nodeEnv!}`, 'NestApplication');
   logger.log(`App Timezone is ${tz as string}`, 'NestApplication');
   logger.log(`🚀 Server running on ${await app.getUrl()}`, 'NestApplication');

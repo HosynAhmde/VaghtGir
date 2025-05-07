@@ -19,7 +19,7 @@ export class AbstractEntity<T> {
   @Column({type:'varchar',nullable:true})
   deletedBy:string
 
-  @DeleteDateColumn()
+  @DeleteDateColumn({nullable:true})
   deletedAt:Date
 
   constructor(entity: Partial<T>) {

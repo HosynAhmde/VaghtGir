@@ -4,6 +4,7 @@ export interface ItemsWithMetadata<T = any> {
 }
 
 export interface Metadata {
+  count: number;
   page: number;
   pages: number;
   nextPage: number;

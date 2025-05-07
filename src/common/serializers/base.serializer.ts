@@ -4,9 +4,9 @@ import { Exclude, Expose } from 'class-transformer';
 
 @Exclude()
 export class Serializer<T> {
-  @Expose({ name: 'id' })
-  @ApiProperty({ name: 'id' })
-  _id: string;
+  @Expose()
+  @ApiProperty()
+  id: string;
 
   @Expose()
   @ApiProperty()

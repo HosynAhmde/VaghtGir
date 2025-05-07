@@ -1,1 +1,3 @@
-export * from './pagination.dto'
+
+export * from './create.dto'
+export * from './update.dto'

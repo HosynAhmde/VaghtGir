@@ -8,6 +8,7 @@ import {
   Post,
   UseGuards,
   UseInterceptors,
+  InternalServerErrorException,
 } from '@nestjs/common';
 import { IResult } from 'ua-parser-js';
 
@@ -66,8 +67,9 @@ export class AuthController {
 
   @Post('login')
   @HttpCode(HttpStatus.OK)
-  login(@Body() dto: LoginDto): Promise<boolean> {
-    return this.authService.login(dto);
+  async login(@Body() dto: LoginDto): Promise<{ success: boolean }> {
+    const result = await this.authService.login(dto);
+    return { success: result };
   }
 
   @Post('verify')
@@ -78,9 +80,8 @@ export class AuthController {
     @Agent() agents: IResult,
     @IP() ip: string,
   ): Promise<AuthSerializer> {
-    return AuthSerializer.build(      
-      await this.authService.verify(verifyDto, { ip, agents }),
-    );
+    const result = await this.authService.verify(verifyDto, { ip, agents });
+    return new AuthSerializer(result);
   }
 
   @Post('logout')
@@ -98,10 +99,9 @@ export class AuthController {
   async refreshToken(
     @RefreshToken() refreshToken: JwtToken,
   ): Promise<AuthSerializer> {
-    return AuthSerializer.build(
-      await this.authService.refreshToken(refreshToken),
-    );
+    const result = await this.authService.refreshToken(refreshToken);
+    return new AuthSerializer(result);
   }
 
-  
+
 }
