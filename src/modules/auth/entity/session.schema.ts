@@ -2,7 +2,7 @@ import { AbstractEntity } from "@Common/entity";
 import { Column, Entity } from "typeorm";
 import { IResult } from "ua-parser-js";
 
-@Entity()
+@Entity({name:'sessions'})
 export class Session extends AbstractEntity<Session> {
   @Column({type:'json'})
   agent?: IResult;

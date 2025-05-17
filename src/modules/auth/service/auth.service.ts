@@ -212,7 +212,6 @@ export class AuthService {
       refreshToken: options?.refresh
         ? undefined
         : this.createRefreshToken(cachedToken.payload),
-      user,
       expiration: Number(ms(exp)) - 100,
     };
   }
@@ -260,14 +259,21 @@ export class AuthService {
 
     private async createUser(phone: string): Promise<User> {
     try {
-      return await this.userService.createUser({
+      // First create a temporary user to get its ID
+      const tempUser = await this.userService.createUser({
         phone,
         role: Roles.User,
-        createdBy: 'system',
+        createdBy: 'system', // Temporary value
+      });
+
+      // Update the user with its own ID as creator
+      return await this.userService.updateUser(tempUser.id, {
+        createdBy: tempUser.id,
+        updatedBy: tempUser.id,
+        updatedAt: new Date(),
       });
     } catch (error) {
       console.log(error);
-
       throw new InternalServerErrorException();
     }
   }

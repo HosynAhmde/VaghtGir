@@ -14,4 +14,6 @@ export class UpdateUserDto extends UpdateDto<UpdateUserDto> {
   @IsEnum(Roles)
   @ValidateIf(o=> 'role' in o)
   role?: Roles;
+
+  createdBy:string
 }
