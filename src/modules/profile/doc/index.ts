@@ -1,0 +1,1 @@
+export * from './get-user-biy-id.doc'

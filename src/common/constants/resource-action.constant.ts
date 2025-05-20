@@ -1,5 +1,6 @@
 export const Resource = {
   User:'user',
+  Profile:'profile',
 } as const;
 
 export type Resource = (typeof Resource)[keyof typeof Resource];

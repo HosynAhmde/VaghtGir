@@ -12,11 +12,10 @@ import { ApiGetUsers,ApiCreateUser, ApiGetUserById, ApiUpdateUser, ApiDeleteUser
 
 
 @ApiTags('Admin - Users')
-@Controller('admin/users')
+@Controller({ path: 'admin/users', version: '1' })
 @UseInterceptors(ClassSerializerInterceptor)
 @UseGuards(AuthGuard,PolicyGuard)
 @SetResource(Resource.User)
-@ApiBearerAuth()
 export class UserAdminController {
   constructor(private readonly userService: UserService) {}
 

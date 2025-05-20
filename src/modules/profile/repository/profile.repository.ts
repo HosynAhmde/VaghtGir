@@ -18,12 +18,12 @@ export class ProfileRepository extends Repository<Profile> {
   }
 
   async findById(id: string): Promise<Profile> {
-    return await this.repository.findOne({ where: { id } });
+    return this.repository.findOne({ where: { id } });
   }
 
   async updateProfile(id: string, data: Partial<Profile>): Promise<Profile> {
     await this.repository.update(id, data);
-    return await this.findById(id);
+    return this.findById(id);
   }
 
   async deleteProfile(id: string): Promise<void> {
